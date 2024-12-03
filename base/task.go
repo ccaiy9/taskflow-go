@@ -46,7 +46,7 @@ func (a *atomTaskBase) Execute(cts CtxStorage) error {
 	return a.exec(cts)
 }
 
-func (a *atomTaskBase) Rollback(cts CtxStorage) error { // TODO@yiccai
+func (a *atomTaskBase) Rollback(cts CtxStorage) error {
 	return a.rb(cts)
 }
 

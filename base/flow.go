@@ -18,7 +18,7 @@ type failedHint struct {
 	t int8
 }
 
-// Flow 只实现线性flow
+// Flow line-flow
 type Flow struct {
 	name         string
 	autoRollBack bool
@@ -37,11 +37,6 @@ func NewFlow(name string, id int8) *Flow {
 		return nil
 	}
 
-	//autoRollBack, err := g.Cfg().Get(context.Background(), "install_policy.auto_rollback")
-	//if err != nil {
-	//	fmt.Errorf("get installer config failed: %+v", err)
-	//	return nil
-	//}
 	return &Flow{
 		name:         name,
 		fId:          id,
@@ -102,7 +97,6 @@ func (f *Flow) Rollback(cts CtxStorage) error {
 	}
 
 	if l == 0 {
-		// 当前task(flow)的第一个task失败
 		return nil
 	}
 
@@ -111,12 +105,7 @@ func (f *Flow) Rollback(cts CtxStorage) error {
 		tk := f.tasks[i]
 		err := tk.Rollback(cts)
 		if err != nil {
-			//if t, ok := tk.(*atomTaskBase); ok {
-			//fmt.Printf("()()()()(): %d-%d-%s-%s-%+v\n", f.Id(), tk.Id(), tk.Name(), tk.Name(), err)
 			tk.SetErrors(false, f.Id(), tk.Id(), tk.Name(), tk.Name(), err)
-			//fmt.Printf("~~~~~Rollback~!!!!!!!: %s\n", tk.GetErrors())
-			//}
-
 		}
 	}
 
@@ -226,12 +215,12 @@ func (f *Flow) GetFailedHint() (int8, int8, error) {
 	parts := strings.Split(line, "-")
 	fid, err := strconv.Atoi(parts[0])
 	if err != nil {
-		fmt.Println("转换错误:", err)
+		fmt.Println("trans error:", err)
 		return 0, 0, err
 	}
 	tid, err := strconv.Atoi(parts[1])
 	if err != nil {
-		fmt.Println("转换错误:", err)
+		fmt.Println("trans error:", err)
 		return 0, 0, err
 	}
 
